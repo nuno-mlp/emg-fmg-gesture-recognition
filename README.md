@@ -43,4 +43,4 @@ This project led to a peer-reviewed publication in the open-access journal *Sign
 **Signals**, 6(8), 1–13.  
 [DOI:10.3390/signals06000008](https://doi.org/10.3390/signals6010008)
 
-➡️ [Download PDF](docs/Signals_Paper.pdf)
+➡️ [Download PDF](docs/signals-06-00008.pdf)
