@@ -35,3 +35,13 @@ Nuno Lourenço Pires
 Biomedical Engineer | Viana do Castelo, Portugal  
 LinkedIn: https://linkedin.com/in/nuno-lourenco-pires  
 GitHub: https://github.com/nuno-mlp
+
+## 📄 Published Paper
+This project led to a peer-reviewed publication in the open-access journal *Signals* (MDPI):
+
+**Pires, N. M. L.; Macedo, M. P. (2025).**  
+*A Bimodal EMG/FMG System Using Machine Learning Techniques for Gesture Recognition Optimization.*  
+**Signals**, 6(8), 1–13.  
+[DOI:10.3390/signals06000008](https://doi.org/10.3390/signals06000008)
+
+➡️ [Download PDF](docs/Signals_Paper.pdf)
