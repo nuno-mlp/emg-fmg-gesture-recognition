@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![DOI](https://img.shields.io/badge/DOI-10.3390/signals06000008-blue)](https://doi.org/10.3390/signals06000008)
+
 # EMG–FMG Gesture Recognition
 
 Proof of Concept · Capstone Project (BSc in Biomedical Engineering)
