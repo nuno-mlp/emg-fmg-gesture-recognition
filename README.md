@@ -34,7 +34,6 @@ Author
 Nuno Lourenço Pires  
 Biomedical Engineer | Viana do Castelo, Portugal  
 LinkedIn: https://linkedin.com/in/nuno-lourenco-pires  
-GitHub: https://github.com/nuno-mlp
 
 ## 📄 Published Paper
 This project led to a peer-reviewed publication in the open-access journal *Signals* (MDPI):
