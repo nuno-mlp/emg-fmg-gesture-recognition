@@ -1,0 +1,170 @@
+close all; clear; clc
+
+% Get list of all .txt files in the current folder
+files = dir('*.txt');
+n_files = length(files);
+
+% Initialize arrays to store features
+features_abertura = [];
+features_fecho = [];
+features_ok = [];
+features_point = [];
+features_pinch = [];
+
+% Define parameters for the onsetting function
+sz = 325; % Set the window size for moving average calculation
+threshold_size = 2750;
+a = 0.2;
+fs = 1000; % Sampling frequency
+
+% Define a tolerance window for finding matching activations
+tolerance_window = 500;
+
+for i = 1:n_files
+    % Get the file name of the current file
+    file_name = files(i).name;
+
+    % Load data from the file into a matrix
+    data = readmatrix(file_name);
+
+    % Extract EMG signals from the data matrix
+    emg_A3 = data(:, 6); % EMG signal for the extensor muscle group
+    emg_A4 = data(:, 7); % EMG signal for the flexor muscle group
+    
+    % Extract FMG signals from the data matrix
+    fmg_A1 = data(:, 8); % FMG signal for the extensor muscle group
+    fmg_A2 = data(:, 9); % FMG signal for the flexor muscle group
+
+    % Apply a band-pass filter to the EMG signals (20 to 500 Hz)
+    filter_object = filtbandpass20500;
+    emg_A3_filtered = filter(filter_object, emg_A3);
+    emg_A4_filtered = filter(filter_object, emg_A4);
+
+    % Denoise the filtered EMG signals using wavelet denoising
+    emg_A3_denoised = wdenoise(emg_A3_filtered, 4);
+    emg_A4_denoised = wdenoise(emg_A4_filtered, 4);
+    
+    % Remove the baseline from the filtered EMG signals
+    emg_A3_processed = emg_A3_denoised - mean(emg_A3_denoised);
+    emg_A4_processed = emg_A4_denoised - mean(emg_A4_denoised);
+
+    % Call onsetting function and store the preprocessed signals and moving averages
+    [onsets_A3, offsets_A3, mavg_emg_A3] = onsetting(emg_A3_processed, sz, threshold_size, a);
+    [onsets_A4, offsets_A4, mavg_emg_A4] = onsetting(emg_A4_processed, sz, threshold_size, a);
+
+    % Call the plot_signals function to visualize the signals
+    figure;
+    plot_signals(fmg_A1, fmg_A2, emg_A3_processed, emg_A4_processed, onsets_A3, offsets_A3, onsets_A4, offsets_A4, mavg_emg_A3, mavg_emg_A4, file_name, fs);
+
+    % Find matching onsets and offsets within the tolerance window
+    matching_activations = [];
+    i_onset_A3 = 1;
+    j_onset_A4 = 1;
+    
+    % Loop through onsets and find matches within the tolerance window
+    while i_onset_A3 <= length(onsets_A3) && j_onset_A4 <= length(onsets_A4)
+        % Compare the difference between onsets to the tolerance window
+        if abs(onsets_A3(i_onset_A3) - onsets_A4(j_onset_A4)) <= tolerance_window
+            found_match = false;
+            for i_offset = i_onset_A3:length(offsets_A3)
+                for j_offset = j_onset_A4:length(offsets_A4)
+                    % Check if the difference between offsets is within the tolerance window
+                    if abs(offsets_A3(i_offset) - offsets_A4(j_offset)) <= tolerance_window
+                        % Store the matching onsets and offsets
+                        matching_activations = [matching_activations; onsets_A3(i_onset_A3), onsets_A4(j_onset_A4), offsets_A3(i_offset), offsets_A4(j_offset)];
+                        found_match = true;
+                        break;
+                    end
+                end
+                if found_match
+                    break;
+                end
+            end
+            i_onset_A3 = i_onset_A3 + 1;
+            j_onset_A4 = j_onset_A4 + 1;
+        % If the difference between onsets is not within the tolerance
+        % window, move to the next onset
+        elseif onsets_A3(i_onset_A3) < onsets_A4(j_onset_A4)
+            i_onset_A3 = i_onset_A3 + 1;
+        else
+            j_onset_A4 = j_onset_A4 + 1;
+        end
+    end
+
+    % Extract features for each matched onset and store as separate instances
+    for idx = 1:size(matching_activations, 1)
+        onset_A3 = matching_activations(idx, 1);
+        onset_A4 = matching_activations(idx, 2);
+        offset_A3 = matching_activations(idx, 3);
+        offset_A4 = matching_activations(idx, 4);
+
+        % Extract features from both EMG and FMG signals within the window
+        features_A1_A3 = [extract_fmg_features(fmg_A1, onset_A3, offset_A3), ...
+            extract_emg_features(emg_A3_processed, onset_A3, offset_A3)];
+        features_A2_A4 = [extract_fmg_features(fmg_A2, onset_A4, offset_A4), ...
+            extract_emg_features(emg_A4_processed, onset_A4, offset_A4)];
+
+        % Combine features from both muscle groups
+        combined_features = [features_A1_A3, features_A2_A4];
+
+        % Append combined features to respective arrays based on the gesture
+        if contains(file_name, 'abrir')
+            features_abertura = [features_abertura; combined_features];
+        elseif contains(file_name, 'fechar')
+            features_fecho = [features_fecho; combined_features];
+        elseif contains(file_name, 'ok')
+            features_ok = [features_ok; combined_features];
+        elseif contains(file_name, 'point')
+            features_point = [features_point; combined_features];
+        elseif contains(file_name, 'pinch')
+            features_pinch = [features_pinch; combined_features];
+        end
+    end
+end
+
+% Combine all feature arrays
+all_features = [features_abertura; features_fecho; features_ok; features_point; features_pinch];
+
+% Create a label array for each gesture type
+labels_abertura = repmat("abrir", size(features_abertura, 1), 1); 
+    % Creates a string array of labels 'abrir'. 
+    % size(features_abertura, 1) returns the number of rows ('1') in the
+    % features_abertura matrix.
+    %  repmat Replicate and tile an array.
+    %     B = repmat(A,M,N) or B = repmat(A,[M,N]) creates a large matrix B 
+    %     consisting of an M-by-N tiling of copies of A. If A is a matrix, 
+    %     the size of B is [size(A,1)*M, size(A,2)*N].
+labels_fecho = repmat("fechar", size(features_fecho, 1), 1);
+labels_ok = repmat("ok", size(features_ok, 1), 1);
+labels_point = repmat("point", size(features_point, 1), 1);
+labels_pinch = repmat("pinch", size(features_pinch, 1), 1);
+
+% Combine all label arrays into one.
+all_labels = [labels_abertura; labels_fecho; labels_ok; labels_point; 
+    labels_pinch];
+
+% Convert the combined features and labels into a table format
+data_table = array2table(all_features);
+data_table.Labels = all_labels;
+
+% Define feature names for both FMG and EMG signals
+fmg_feature_names = ["mean_fmg", "rms_fmg", "std_fmg", "median_fmg", "wl_fmg", "ssc_fmg"];
+emg_feature_names = ["rms", "mav", "sd", "iqr", "wl", "ssc", "iemg", ...
+    "kurt", "log", "mnf", "pkf", "mnpsd"];
+
+% Combine feature names for extensor and flexor muscle groups
+combined_feature_names = [fmg_feature_names + "_Extensor", emg_feature_names + "_Extensor", ...
+    fmg_feature_names + "_Flexor", emg_feature_names + "_Flexor"];
+
+% Assign feature names to the table columns
+data_table.Properties.VariableNames = [combined_feature_names, "labels"];
+
+% Shuffle the data_table rows to ensure random distribution before splitting
+rng(0); % For reproducibility
+num_rows = height(data_table);
+shuffled_data_table = data_table(randperm(num_rows), :);
+
+% Split the shuffled dataset into training and testing sets
+train_size = round(0.80 * num_rows); % Size of the training dataset
+train_data = shuffled_data_table(1:train_size, :);
+test_data = shuffled_data_table(train_size+1:end, :);
