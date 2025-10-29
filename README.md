@@ -41,6 +41,6 @@ This project led to a peer-reviewed publication in the open-access journal *Sign
 **Pires, N. M. L.; Macedo, M. P. (2025).**  
 *A Bimodal EMG/FMG System Using Machine Learning Techniques for Gesture Recognition Optimization.*  
 **Signals**, 6(8), 1–13.  
-[DOI:10.3390/signals06000008](https://doi.org/10.3390/signals06000008)
+[DOI:10.3390/signals06000008](https://doi.org/10.3390/signals6010008)
 
 ➡️ [Download PDF](docs/Signals_Paper.pdf)
