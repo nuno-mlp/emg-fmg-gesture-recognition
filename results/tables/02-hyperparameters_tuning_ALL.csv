@@ -1,0 +1,16 @@
+Session: ClassificationLearnerSession_02-hyperparameters_tuning_ALL,,,,,,,,,,,,
+Training Data: train_data    Observations: 864,,,,,,,,,,,,
+"Predictors: 36    Predictor Names: mean_fmg_Extensor, rms_fmg_Extensor, std_fmg_Extensor, median_fmg_Extensor, wl_fmg_Extensor, ssc_fmg_Extensor, rms_Extensor, mav_Extensor, sd_Extensor, iqr_Extensor, wl_Extensor, ssc_Extensor, iemg_Extensor, kurt_Extensor, log_Extensor, mnf_Extensor, pkf_Extensor, mnpsd_Extensor, mean_fmg_Flexor, rms_fmg_Flexor, std_fmg_Flexor, median_fmg_Flexor, wl_fmg_Flexor, ssc_fmg_Flexor, rms_Flexor, mav_Flexor, sd_Flexor, iqr_Flexor, wl_Flexor, ssc_Flexor, iemg_Flexor, kurt_Flexor, log_Flexor, mnf_Flexor, pkf_Flexor, mnpsd_Flexor",,,,,,,,,,,,
+"Response Name: labels    Response Classes: 5    Response Class Names: abrir, fechar, ok, pinch, point",,,,,,,,,,,,
+Validation: 5-fold cross-validation,,,,,,,,,,,,
+Test Data: test_data    Observations: 216,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Favorite,Model Number,Model Type,Preset,Accuracy % (Validation),Accuracy % (Test),Prediction Speed (obs/sec),Training Time (sec),Model Size (bytes),Hyperparameters,Selected Features,Feature Ranking Algorithm,Optimizer Options
+0,9,SVM,Custom SVM,89.6990740740741,87.5,8623.32249429603,354.2910199,300536,Kernel function: Quadratic; Kernel scale: Automatic,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,10,SVM,Custom SVM,90.162037037037,89.3518518518518,15198.0495836368,483.7052423,317472,Kernel function: Cubic; Kernel scale: Automatic,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,11,SVM,Custom SVM,89.0046296296296,88.4259259259259,7474.90844534882,55.6760824,527888,Kernel function: Gaussian; Kernel scale: Automatic,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,12,KNN,Custom KNN,89.3518518518518,90.2777777777778,8680.06719014973,37.5001725,273656,Distance weight: Squared inverse,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,13,KNN,Custom KNN,88.7731481481482,90.7407407407407,11223.1987675265,41.8851322,273642,Number of neighbors: 1,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,14,Ensemble,Custom Ensemble,86.3425925925926,85.6481481481482,378.547552473197,663.7494481,21525806,Ensemble method: Bag; Learner type: Decision tree; Number of predictors to sample: Select All,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
+0,15,Neural Network,Custom Neural Network,90.5092592592593,87.037037037037,22694.0220688858,279.4085958,38949,Number of fully connected layers: 1; Iteration limit: 1000,36/36,None,Optimizer: Bayesian optimization; Acquisition function: Expected improvement per second plus; Iterations: 30; Training time limit: false
