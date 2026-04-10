@@ -1,13 +1,26 @@
 cff-version: 1.2.0
-title: "A Bimodal EMG/FMG System Using Machine Learning Techniques for Gesture Recognition Optimization"
+message: "If you use this repository, please cite it as below"
+type: software
+
 authors:
-  - family-names: Pires
-    given-names: Nuno Lourenço
-  - family-names: Macedo
-    given-names: Milton P.
-year: 2025
-doi: 10.3390/signals06000008
-license: MIT
-repository-code: https://github.com/nuno-mlp/emg-fmg-gesture-recognition
-url: https://doi.org/10.3390/signals06000008
-message: "If you use this work, please cite the Signals 2025 paper."
+  - family-names: "Pires"
+    given-names: "Nuno"
+
+title: "EMG–FMG Gesture Recognition: Signal Processing and Classification Workflow"
+date-released: 2026-04-09
+url: "https://github.com/nuno-mlp/emg-fmg-gesture-recognition"
+
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Pires"
+      given-names: "Nuno Lourenço"
+    - family-names: "Macedo"
+      given-names: "Milton P."
+      orcid: "https://orcid.org/0000-0003-0595-5298"
+  title: "A Bimodal EMG/FMG System Using Machine Learning Techniques for Gesture Recognition Optimization"
+  journal: "Signals"
+  year: 2025
+  volume: 6
+  issue: 1
+  doi: "10.3390/signals6010008"
